@@ -36,18 +36,13 @@ namespace DBWebApi.Controllers
         }
 
         [ResponseType(typeof(User))]
-        public IHttpActionResult Login(Login login)
+        public IHttpActionResult GetUser(string mail, string pass)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            User user= db.User.Where(x => x.Mail == login.Mail && x.Password == login.Password).First();
+            User user = db.User.Where(x => x.Mail == mail && x.Password == pass).First();
             if (user == null)
-                //Хз че тут написать, но пусть так будет))
-                return BadRequest("Неверная комбинация логин-пароль");
-            if(!user.MailConfirm)
+                //Хз че тут написать, но пусть пока будет так
+                return BadRequest("Неверная комбинация логина и пароля");
+            if (!user.MailConfirm)
                 return BadRequest("Нужно подтверждение почты");
             return Ok(user);
         }

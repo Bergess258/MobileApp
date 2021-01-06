@@ -15,15 +15,6 @@ namespace DBWebApi
     {
         public static void Register(HttpConfiguration config)
         {
-            NpgsqlConnectionStringBuilder builder = new NpgsqlConnectionStringBuilder();
-            builder.TrustServerCertificate = true;
-            builder.SslMode = SslMode.Require;
-            builder.Host = "ec2-34-248-165-3.eu-west-1.compute.amazonaws.com";
-            builder.Database = "danhsa7rd0h0u5";
-            builder.Port = 5432;
-            builder.Username = "veycugvkaidffx";
-            builder.Password = "a9fc1b7d0b47c4dffae1862492b38216ccb686d47324c5bf55e0de09a2a6c590";
-            string s = builder.ToString();
             // Конфигурация и службы веб-API
 
             // Маршруты веб-API

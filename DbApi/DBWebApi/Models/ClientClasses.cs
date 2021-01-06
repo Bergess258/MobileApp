@@ -5,6 +5,7 @@ using System.Web;
 
 namespace DBWebApi.Models
 {
+
     public class QuestWithTasks : Quest
     {
         public bool done { get; set; }
@@ -41,4 +42,5 @@ namespace DBWebApi.Models
 
         }
     }
+
 }

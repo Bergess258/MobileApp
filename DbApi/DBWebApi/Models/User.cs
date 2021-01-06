@@ -33,16 +33,4 @@ namespace DBWebApi.Models
         public virtual ICollection<UserImg> UserImg { get; set; }
         public virtual ICollection<UserQuest> UserQuests { get; set; }
     }
-
-    public class Login
-    {
-        //Должны быть зашифрованы
-        public string Mail { get; set; }
-        public string Password { get; set; }
-        public Login(string mail,string pass)
-        {
-            Mail = mail;
-            Password = pass;
-        }
-    }
 }
