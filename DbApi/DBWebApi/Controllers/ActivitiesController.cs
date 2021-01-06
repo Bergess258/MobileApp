@@ -33,6 +33,14 @@ namespace DBWebApi.Controllers
 
             return Ok(activity);
         }
+        public IHttpActionResult GetActivity(int id,int userId)
+        {
+            ActAttending actAttending = new ActAttending() { UserId = userId, ActivityId = id };
+            if (db.ActAttending.Find(actAttending)==null)
+                db.ActAttending.Add(actAttending);
+
+            return Ok();
+        }
 
         // PUT: api/Activities/5
         [ResponseType(typeof(void))]

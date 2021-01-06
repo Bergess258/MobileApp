@@ -101,7 +101,6 @@ namespace DBWebApi.Controllers
             db.SaveChanges();
         }
 
-        //На вход должны подаваться новые таски с 
         public IHttpActionResult UsersQuestWithTasks(UserQuestWithTasks usersWithQuest)
         {
             if (!ModelState.IsValid)
@@ -121,7 +120,7 @@ namespace DBWebApi.Controllers
             return Ok();
         }
         [ResponseType(typeof(Quest))]
-        public IHttpActionResult PostQuest(QuestWithTasks quest)
+        public IHttpActionResult PostQuest(Quest quest)
         {
             if (!ModelState.IsValid)
             {
