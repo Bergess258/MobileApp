@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30413.136
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DBWebApi", "DBWebApi\DBWebApi.csproj", "{E2B8AB54-8659-46B3-8022-75CAE618F172}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DBWebApi.Tests", "DBWebApi.Tests\DBWebApi.Tests.csproj", "{9F5B8A72-CA51-4098-B7B5-621263C9AA7E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E2B8AB54-8659-46B3-8022-75CAE618F172}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E2B8AB54-8659-46B3-8022-75CAE618F172}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E2B8AB54-8659-46B3-8022-75CAE618F172}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E2B8AB54-8659-46B3-8022-75CAE618F172}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9F5B8A72-CA51-4098-B7B5-621263C9AA7E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9F5B8A72-CA51-4098-B7B5-621263C9AA7E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9F5B8A72-CA51-4098-B7B5-621263C9AA7E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9F5B8A72-CA51-4098-B7B5-621263C9AA7E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {142EFE12-1865-4337-B01E-108C7E9D6DEA}
+	EndGlobalSection
+EndGlobal
