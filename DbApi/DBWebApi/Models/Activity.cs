@@ -19,5 +19,6 @@ namespace DBWebApi.Models
 
         public virtual ActCategory Category { get; set; }
         public virtual ICollection<ActAttending> ActAttendings { get; set; }
+        public virtual ICollection<ActChat> ActChat { get; set; }
     }
 }

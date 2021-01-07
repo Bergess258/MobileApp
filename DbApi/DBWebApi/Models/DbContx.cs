@@ -1,5 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System;
+﻿using System;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
+
 
 namespace DBWebApi.Models
 {
@@ -15,15 +17,16 @@ namespace DBWebApi.Models
         }
 
         public virtual DbSet<ActAttending> ActAttending { get; set; }
-        public virtual DbSet<ActCategory> ActCategory { get; set; }
-        public virtual DbSet<Activity> Activity { get; set; }
-        public virtual DbSet<Quest> Quest { get; set; }
-        public virtual DbSet<QuestTask> QuestTask { get; set; }
+        public virtual DbSet<ActCategory> ActCategories { get; set; }
+        public virtual DbSet<ActChat> ActChats { get; set; }
+        public virtual DbSet<Activity> Activities { get; set; }
+        public virtual DbSet<Quest> Quests { get; set; }
+        public virtual DbSet<QuestTask> QuestTasks { get; set; }
         public virtual DbSet<QuestTaskUser> QuestTaskUser { get; set; }
-        public virtual DbSet<Task> Task { get; set; }
-        public virtual DbSet<User> User { get; set; }
+        public virtual DbSet<Task> Tasks { get; set; }
+        public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<UserImg> UserImg { get; set; }
-        public virtual DbSet<UserQuest> UserQuest { get; set; }
+        public virtual DbSet<UserQuest> UserQuests { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -43,13 +46,13 @@ namespace DBWebApi.Models
 
                 entity.Property(e => e.Id).UseIdentityAlwaysColumn();
 
-                entity.HasOne(d => d.Activity)
+                entity.HasOne(d => d.Activities)
                     .WithMany(p => p.ActAttendings)
                     .HasForeignKey(d => d.ActivityId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FkActivity");
 
-                entity.HasOne(d => d.User)
+                entity.HasOne(d => d.Users)
                     .WithMany(p => p.ActAttendings)
                     .HasForeignKey(d => d.UserId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
@@ -65,6 +68,29 @@ namespace DBWebApi.Models
                 entity.Property(e => e.Name)
                     .IsRequired()
                     .HasMaxLength(50);
+            });
+
+            modelBuilder.Entity<ActChat>(entity =>
+            {
+                entity.ToTable("ActChat");
+
+                entity.Property(e => e.Id).UseIdentityAlwaysColumn();
+
+                entity.Property(e => e.Text)
+                    .IsRequired()
+                    .HasColumnType("character varying");
+
+                entity.HasOne(d => d.Activity)
+                    .WithMany(p => p.ActChat)
+                    .HasForeignKey(d => d.ActivityId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("fk_Activity");
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.ActChat)
+                    .HasForeignKey(d => d.UserId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("fk_User");
             });
 
             modelBuilder.Entity<Activity>(entity =>

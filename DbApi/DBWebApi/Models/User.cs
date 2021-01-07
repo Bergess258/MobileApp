@@ -27,6 +27,7 @@ namespace DBWebApi.Models
         public int EngPoints { get; set; }
 
         public virtual ICollection<ActAttending> ActAttendings { get; set; }
+        public virtual ICollection<ActChat> ActChat { get; set; }
         public virtual ICollection<QuestTaskUser> QuestTaskUsers { get; set; }
         //можно не читать полностью <3
         //отдельная хрень на картинку(так вроде лучше работать должно и не будет нужная инфа подгружаться "долго"(в кавычках потому что я хз сколько это времени займет в обоих случаях))

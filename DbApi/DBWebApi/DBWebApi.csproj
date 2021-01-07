@@ -373,8 +373,9 @@
     </Compile>
     <Compile Include="Models\ActAttending.cs" />
     <Compile Include="Models\ActCategory.cs" />
+    <Compile Include="Models\ActChat.cs" />
     <Compile Include="Models\Activity.cs" />
-    <Compile Include="Models\DbContx.cs" />
+    <Compile Include="Models\DBContx.cs" />
     <Compile Include="Models\Quest.cs" />
     <Compile Include="Models\QuestTask.cs" />
     <Compile Include="Models\QuestTaskUser.cs" />

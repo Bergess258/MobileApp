@@ -19,14 +19,14 @@ namespace DBWebApi.Controllers
         // GET: api/Quests
         public IQueryable<Quest> GetQuests()
         {
-            return db.Quest;
+            return db.Quests;
         }
 
         // GET: api/Quests/5
         [ResponseType(typeof(Quest))]
         public IHttpActionResult GetQuest(int id)
         {
-            Quest quest = db.Quest.Find(id);
+            Quest quest = db.Quests.Find(id);
             if (quest == null)
             {
                 return NotFound();
@@ -84,19 +84,19 @@ namespace DBWebApi.Controllers
 
         private void QuestWithTasksDbAdd(QuestWithTasks quest)
         {
-            db.Quest.Add(quest.GetQuest());
+            db.Quests.Add(quest.GetQuest());
             TaskWithCounter[] tasks = quest.tasks;
             for (int i = 0; i < tasks.Length; ++i)
             {
                 if (tasks[i].Id == -1)
                 {
-                    db.Task.Add(tasks[i]);
+                    db.Tasks.Add(tasks[i]);
                 }
             }
             db.SaveChanges();
             for (int i = 0; i < tasks.Length; ++i)
             {
-                db.QuestTask.Add(new QuestTask() { Quest = quest, Task = tasks[i], CountToComplete = tasks[i].countToComplete });
+                db.QuestTasks.Add(new QuestTask() { Quest = quest, Task = tasks[i], CountToComplete = tasks[i].countToComplete });
             }
             db.SaveChanges();
         }
@@ -112,7 +112,7 @@ namespace DBWebApi.Controllers
             User[] users = usersWithQuest.users;
             for (int i = 0; i < users.Length; i++)
             {
-                db.UserQuest.Add(new UserQuest() {User = users[i] ,Quest = usersWithQuest, Status = false});
+                db.UserQuests.Add(new UserQuest() {User = users[i] ,Quest = usersWithQuest, Status = false});
             }
 
             db.SaveChanges();
@@ -127,7 +127,7 @@ namespace DBWebApi.Controllers
                 return BadRequest(ModelState);
             }
 
-            db.Quest.Add(quest);
+            db.Quests.Add(quest);
             db.SaveChanges();
 
             return CreatedAtRoute("DefaultApi", new { id = quest.Id }, quest);
@@ -137,18 +137,18 @@ namespace DBWebApi.Controllers
         [ResponseType(typeof(Quest))]
         public IHttpActionResult DeleteQuest(int id)
         {
-            Quest quest = db.Quest.Find(id);
+            Quest quest = db.Quests.Find(id);
             if (quest == null)
             {
                 return NotFound();
             }
-            QuestTask[] quest_Tasks = db.QuestTask.Where(x => x.QuestId == id).ToArray();
+            QuestTask[] quest_Tasks = db.QuestTasks.Where(x => x.QuestId == id).ToArray();
             for (int i = 0; i < quest_Tasks.Length; ++i)
             {
                 db.QuestTaskUser.RemoveRange(db.QuestTaskUser.Where(x=>x.QuestTaskId==quest_Tasks[i].Id));
             }
-            db.QuestTask.RemoveRange(quest_Tasks);
-            db.Quest.Remove(quest);
+            db.QuestTasks.RemoveRange(quest_Tasks);
+            db.Quests.Remove(quest);
             db.SaveChanges();
 
             return Ok(quest);
@@ -165,7 +165,7 @@ namespace DBWebApi.Controllers
 
         private bool QuestExists(int id)
         {
-            return db.Quest.Count(e => e.Id == id) > 0;
+            return db.Quests.Count(e => e.Id == id) > 0;
         }
     }
 }

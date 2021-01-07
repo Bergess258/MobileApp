@@ -18,14 +18,14 @@ namespace DBWebApi.Controllers
         // GET: api/Activities
         public IQueryable<Activity> GetActivities()
         {
-            return db.Activity;
+            return db.Activities;
         }
 
         // GET: api/Activities/5
         [ResponseType(typeof(Activity))]
         public IHttpActionResult GetActivity(int id)
         {
-            Activity activity = db.Activity.Find(id);
+            Activity activity = db.Activities.Find(id);
             if (activity == null)
             {
                 return NotFound();
@@ -86,7 +86,7 @@ namespace DBWebApi.Controllers
                 return BadRequest(ModelState);
             }
 
-            db.Activity.Add(activity);
+            db.Activities.Add(activity);
             db.SaveChanges();
 
             return CreatedAtRoute("DefaultApi", new { id = activity.Id }, activity);
@@ -96,13 +96,13 @@ namespace DBWebApi.Controllers
         [ResponseType(typeof(Activity))]
         public IHttpActionResult DeleteActivity(int id)
         {
-            Activity activity = db.Activity.Find(id);
+            Activity activity = db.Activities.Find(id);
             if (activity == null)
             {
                 return NotFound();
             }
 
-            db.Activity.Remove(activity);
+            db.Activities.Remove(activity);
             db.SaveChanges();
 
             return Ok(activity);
@@ -119,7 +119,7 @@ namespace DBWebApi.Controllers
 
         private bool ActivityExists(int id)
         {
-            return db.Activity.Count(e => e.Id == id) > 0;
+            return db.Activities.Count(e => e.Id == id) > 0;
         }
     }
 }

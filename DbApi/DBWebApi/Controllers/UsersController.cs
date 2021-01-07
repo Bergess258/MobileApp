@@ -20,14 +20,14 @@ namespace DBWebApi.Controllers
         // GET: api/Users
         public IQueryable<User> GetUser()
         {
-            return db.User;
+            return db.Users;
         }
 
         // GET: api/Users/5
         [ResponseType(typeof(User))]
         public IHttpActionResult GetUser(int id)
         {
-            User user = db.User.Find(id);
+            User user = db.Users.Find(id);
             if (user == null)
             {
                 return NotFound();
@@ -39,7 +39,7 @@ namespace DBWebApi.Controllers
         [ResponseType(typeof(User))]
         public IHttpActionResult GetUser(string mail, string pass)
         {
-            User user = db.User.Where(x => x.Mail == mail && x.Password == pass).First();
+            User user = db.Users.Where(x => x.Mail == mail && x.Password == pass).First();
             if (user == null)
                 //Хз че тут написать, но пусть пока будет так
                 return BadRequest("Неверная комбинация логина и пароля");
@@ -92,7 +92,7 @@ namespace DBWebApi.Controllers
                 return BadRequest(ModelState);
             }
 
-            db.User.Add(user);
+            db.Users.Add(user);
 
             try
             {
@@ -117,13 +117,13 @@ namespace DBWebApi.Controllers
         [ResponseType(typeof(User))]
         public IHttpActionResult DeleteUser(int id)
         {
-            User user = db.User.Find(id);
+            User user = db.Users.Find(id);
             if (user == null)
             {
                 return NotFound();
             }
 
-            db.User.Remove(user);
+            db.Users.Remove(user);
             db.SaveChanges();
 
             return Ok(user);
@@ -134,7 +134,7 @@ namespace DBWebApi.Controllers
         {
             //Check
             //User user = db.User.Where(u=>u.Id ==id).Include(u=>u.UserQuest).ThenInclude(uq=>uq.Quest).ThenInclude(q=>q.Quest_Task).ThenInclude(qt=>qt.Quest_Task_User).ThenInclude(qt=>qt.Quest_Task.Task).FirstOrDefault();
-            User user = db.User.Where(u => u.Id == id).First();
+            User user = db.Users.Where(u => u.Id == id).First();
             if (user == null)
                 //Хз че тут написать, но пусть пока будет так
                 return BadRequest(noSuchUserError);
@@ -165,17 +165,19 @@ namespace DBWebApi.Controllers
 
         private bool UserExists(int id)
         {
-            return db.User.Count(e => e.Id == id) > 0;
+            return db.Users.Count(e => e.Id == id) > 0;
         }
 
-        public IHttpActionResult SendThanks(int userId)
+        public IHttpActionResult SendThanks(int id,int actChatId)
         {
-            User user = db.User.Where(e => e.Id == userId).First();
-            if (user == null)
+            ActChat actChat = db.ActChats.Where(e => e.Id == actChatId).First();
+            if (actChat == null)
                 //Хз че тут написать, но пусть пока будет так
                 return BadRequest(noSuchUserError);
-            user.Thanks++;
-            db.Entry(user).State = EntityState.Modified;
+            actChat.Thanks++;
+            actChat.User.Thanks++;
+            db.Entry(actChat).State = EntityState.Modified;
+            db.Entry(actChat.User).State = EntityState.Modified;
             db.SaveChanges();
             return Ok();
         }
