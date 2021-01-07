@@ -19,7 +19,7 @@ namespace DBWebApi.Models
         public string Name { get; set; }
         //Бабки в магазе
         public int Currency { get; set; }
-        //Уже забыл зачем
+        //Уже забыл зачем. Вроде как репутация, можно просто кого-то благодарить. Нлорм тема
         public int Thanks { get; set; }
         //Для админов
         public string Role { get; set; }

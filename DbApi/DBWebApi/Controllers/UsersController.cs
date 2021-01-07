@@ -14,6 +14,7 @@ namespace DBWebApi.Controllers
 {
     public class UsersController : ApiController
     {
+        private const string noSuchUserError = "No such user";
         private DBContx db = new DBContx();
 
         // GET: api/Users
@@ -128,11 +129,15 @@ namespace DBWebApi.Controllers
             return Ok(user);
         }
 
-        public QuestWithTasks[] GetQuests(int id)
+        [ResponseType(typeof(QuestWithTasks[]))]
+        public IHttpActionResult GetQuests(int id)
         {
             //Check
             //User user = db.User.Where(u=>u.Id ==id).Include(u=>u.UserQuest).ThenInclude(uq=>uq.Quest).ThenInclude(q=>q.Quest_Task).ThenInclude(qt=>qt.Quest_Task_User).ThenInclude(qt=>qt.Quest_Task.Task).FirstOrDefault();
-            User user = db.User.Where(u => u.Id == id).FirstOrDefault();
+            User user = db.User.Where(u => u.Id == id).First();
+            if (user == null)
+                //Хз че тут написать, но пусть пока будет так
+                return BadRequest(noSuchUserError);
             var userQuestsNoTask = user.UserQuests.ToArray();
             QuestWithTasks[] userQuests = new QuestWithTasks[user.UserQuests.Count];
             for (int i = 0; i < userQuestsNoTask.Length; ++i)
@@ -146,7 +151,7 @@ namespace DBWebApi.Controllers
                     for (int j = 0; j < questTasks.Length; ++j)
                         userQuests[i].tasks[j] = new TaskWithCounter(questTasks[i].Task, questTasks[i].QuestTaskUser.FirstOrDefault().Counter, questTasks[i].CountToComplete);
             }
-            return userQuests;
+            return Ok(userQuests);
         }
 
         protected override void Dispose(bool disposing)
@@ -161,6 +166,18 @@ namespace DBWebApi.Controllers
         private bool UserExists(int id)
         {
             return db.User.Count(e => e.Id == id) > 0;
+        }
+
+        public IHttpActionResult SendThanks(int userId)
+        {
+            User user = db.User.Where(e => e.Id == userId).First();
+            if (user == null)
+                //Хз че тут написать, но пусть пока будет так
+                return BadRequest(noSuchUserError);
+            user.Thanks++;
+            db.Entry(user).State = EntityState.Modified;
+            db.SaveChanges();
+            return Ok();
         }
     }
 }
