@@ -46,9 +46,30 @@ namespace DBWebApi.Models
     #endregion
 
     #region Activities
-    public class ActWithCat:Activity
+    public class ActWithCat
     {
+        public string name { get; set; }
+        public DateTime? startD { get; set; }
+        public DateTime? endD { get; set; }
+
         public Category[] categories;
+        public ActWithCat()
+        {
+
+        }
+        public ActWithCat(Activity activity)
+        {
+            name = activity.Name;
+            startD = activity.StartD;
+            endD = activity.EndD;
+        }
+        public ActWithCat(Activity activity, Category[] cats):this(activity)
+        {
+            categories = cats;
+        }
+
+        public static implicit operator Activity(ActWithCat b) => new Activity() { Name =b.name, StartD = b.startD, EndD = b.endD };
+
     }
     #endregion
 }

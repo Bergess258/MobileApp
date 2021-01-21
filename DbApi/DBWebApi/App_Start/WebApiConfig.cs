@@ -30,7 +30,8 @@ namespace DBWebApi
                 routeTemplate: "{controller}/{action}/{id}",
                 defaults: new { id = RouteParameter.Optional }
             );
-            GlobalConfiguration.Configuration.IncludeErrorDetailPolicy = IncludeErrorDetailPolicy.Always;
+            //GlobalConfiguration.Configuration.IncludeErrorDetailPolicy = IncludeErrorDetailPolicy.Always;
+            GlobalConfiguration.Configuration.Formatters.JsonFormatter.SerializerSettings.Re‌​ferenceLoopHandling = ReferenceLoopHandling.Ignore;
             config.Formatters.Remove(config.Formatters.XmlFormatter);
             //config.Formatters.JsonFormatter.SerializerSettings.Converters.Clear();
             //config.Formatters.JsonFormatter.SerializerSettings.Converters.Add(new App_Start.DictionaryWithANonPrimitiveKeyConverter<Quest, Dictionary<string, QuestTask>>());

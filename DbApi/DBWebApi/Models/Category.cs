@@ -10,6 +10,11 @@ namespace DBWebApi.Models
             ActCategories = new HashSet<ActCategory>();
         }
 
+        public Category(string name):base()
+        {
+            Name = name;
+        }
+
         public int Id { get; set; }
         public string Name { get; set; }
 

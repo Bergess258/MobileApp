@@ -367,6 +367,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\ActivitiesController.cs" />
+    <Compile Include="Controllers\DuplicatesController.cs" />
     <Compile Include="Controllers\QuestsController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Global.asax.cs">
@@ -407,6 +408,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Data\" />
+    <Folder Include="Views\Duplicates\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -10,6 +10,7 @@ namespace DBWebApi.Models
         public Activity()
         {
             ActAttendings = new HashSet<ActAttending>();
+            //ActCategories = new HashSet<ActCategory>(); ;
         }
 
         public int Id { get; set; }

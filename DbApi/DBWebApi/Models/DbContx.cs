@@ -108,13 +108,13 @@ namespace DBWebApi.Models
 
                 entity.Property(e => e.Id).UseIdentityAlwaysColumn();
 
-                entity.Property(e => e.EndD).HasColumnType("date");
+                entity.Property(e => e.EndD).HasColumnType("timestamp with time zone");
 
                 entity.Property(e => e.Name)
                     .IsRequired()
                     .HasMaxLength(100);
 
-                entity.Property(e => e.StartD).HasColumnType("date");
+                entity.Property(e => e.StartD).HasColumnType("timestamp with time zone");
             });
 
             modelBuilder.Entity<Category>(entity =>

@@ -16,9 +16,18 @@ namespace DBWebApi.Controllers
         private DBContx db = new DBContx();
 
         // GET: api/Activities
-        public IQueryable<Activity> GetActivities()
+        public ActWithCat[] GetActivities()
         {
-            return db.Activities;
+            Activity[] activities = db.Activities.Include(x=>x.ActCategories).ThenInclude(x=>x.Category).ToArray();
+            ActWithCat[] actWithCat = new ActWithCat[activities.Length];
+            for (int i = 0; i < activities.Length; ++i)
+            {
+                if (activities[i].ActCategories != null)
+                    actWithCat[i] = new ActWithCat(activities[i], activities[i].ActCategories.Select(x => x.Category).ToArray());
+                else
+                    actWithCat[i] = new ActWithCat(activities[i]);
+            }
+            return actWithCat;
         }
 
         // GET: api/Activities/5
@@ -78,7 +87,7 @@ namespace DBWebApi.Controllers
         }
 
         // POST: api/Activities
-        [ResponseType(typeof(Activity))]
+        [ResponseType(typeof(ActWithCat))]
         public IHttpActionResult PostActivity(ActWithCat activity)
         {
             if (!ModelState.IsValid)
@@ -89,17 +98,25 @@ namespace DBWebApi.Controllers
 
             for (int i = 0; i < length; i++)
             {
-                if (activity.categories[i].Id == -1)
+                if (activity.categories[i].Id == 0)
                     db.Categories.Add(activity.categories[i]);
             }
-            db.Activities.Add(activity);
+            Activity actReal = activity;
+            db.Activities.Add(actReal);
             db.SaveChanges();
 
             for (int i = 0; i < activity.categories.Length; i++)
-                db.ActCategories.Add(new ActCategory() { Activity = activity, Category = activity.categories[i] });
+            {
+                ActCategory actCategory = new ActCategory() { Activity = actReal, Category = activity.categories[i] };
+                db.ActCategories.Add(actCategory);
+                actReal.ActCategories.Add(actCategory);
+                db.Entry(actReal).State = EntityState.Modified;
+                activity.categories[i].ActCategories.Add(actCategory);
+                db.Entry(activity.categories[i]).State = EntityState.Modified;
+            }
             db.SaveChanges();
 
-            return CreatedAtRoute("DefaultApi", new { id = activity.Id }, activity);
+            return Ok(activity);
         }
 
         [ResponseType(typeof(Activity))]

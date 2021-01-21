@@ -39,8 +39,8 @@ namespace DBWebApi.Tests
         [TestMethod]
         public void TestPutActivityWithCategory()
         {
-            Activity testObj = new Activity() { Name = "Test" };
-            testObj.
+            ActWithCat testObj = new ActWithCat() { name = "Test" };
+            testObj.categories = new Category[] { new Category("Тренинг"),new Category("Обязательно") };
             var qt = new ActivitiesController();
             var result = qt.PostActivity(testObj);
             Assert.IsNotNull(result);
