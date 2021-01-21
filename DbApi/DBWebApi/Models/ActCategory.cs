@@ -6,10 +6,6 @@ namespace DBWebApi.Models
 {
     public partial class ActCategory
     {
-        public ActCategory()
-        {
-            Activities = new HashSet<Activity>();
-        }
 
         public int Id { get; set; }
         public int ActivityId { get; set; }
@@ -17,6 +13,5 @@ namespace DBWebApi.Models
 
         public virtual Activity Activity { get; set; }
         public virtual Category Category { get; set; }
-        public virtual ICollection<Activity> Activities { get; set; }
     }
 }
