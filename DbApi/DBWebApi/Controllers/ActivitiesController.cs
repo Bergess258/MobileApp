@@ -16,16 +16,16 @@ namespace DBWebApi.Controllers
         private DBContx db = new DBContx();
 
         // GET: api/Activities
-        public ActWithCat[] GetActivities()
+        public ActWithCatGet[] GetActivities()
         {
             Activity[] activities = db.Activities.Include(x=>x.ActCategories).ThenInclude(x=>x.Category).ToArray();
-            ActWithCat[] actWithCat = new ActWithCat[activities.Length];
+            ActWithCatGet[] actWithCat = new ActWithCatGet[activities.Length];
             for (int i = 0; i < activities.Length; ++i)
             {
                 if (activities[i].ActCategories != null)
-                    actWithCat[i] = new ActWithCat(activities[i], activities[i].ActCategories.Select(x => x.Category).ToArray());
+                    actWithCat[i] = new ActWithCatGet(activities[i], activities[i].ActCategories.Select(x => x.Category.Name).ToArray());
                 else
-                    actWithCat[i] = new ActWithCat(activities[i]);
+                    actWithCat[i] = new ActWithCatGet(activities[i]);
             }
             return actWithCat;
         }
@@ -87,8 +87,8 @@ namespace DBWebApi.Controllers
         }
 
         // POST: api/Activities
-        [ResponseType(typeof(ActWithCat))]
-        public IHttpActionResult PostActivity(ActWithCat activity)
+        [ResponseType(typeof(ActWithCatPost))]
+        public IHttpActionResult PostActivity(ActWithCatPost activity)
         {
             if (!ModelState.IsValid)
             {

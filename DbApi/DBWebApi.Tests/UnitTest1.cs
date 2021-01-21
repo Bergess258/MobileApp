@@ -21,7 +21,7 @@ namespace DBWebApi.Tests
         }
 
         [TestMethod]
-        public void TestPutUser()
+        public void TestPostUser()
         {
             User testObj = new User() {Name = "Test",Mail = "Test",Password = "Bruh" };
             var qt = new UsersController();
@@ -29,7 +29,7 @@ namespace DBWebApi.Tests
             Assert.IsNotNull(result);
         }
         [TestMethod]
-        public void TestPutActivityNoCategory()
+        public void TestPostActivityNoCategory()
         {
             Activity testObj = new Activity() { Name = "Test"};
             var qt = new ActivitiesController();
@@ -37,10 +37,10 @@ namespace DBWebApi.Tests
             Assert.IsNotNull(result);
         }
         [TestMethod]
-        public void TestPutActivityWithCategory()
+        public void TestPostActivityWithCategory()
         {
-            ActWithCat testObj = new ActWithCat() { name = "Test" };
-            testObj.categories = new Category[] { new Category("Тренинг"),new Category("Обязательно") };
+            ActWithCatPost testObj = new ActWithCatPost("Test");
+            testObj.categories = new Category[] { new Category("Проверочное")/*,new Category("Обязательно")*/ };
             var qt = new ActivitiesController();
             var result = qt.PostActivity(testObj);
             Assert.IsNotNull(result);

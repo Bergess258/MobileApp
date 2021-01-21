@@ -14,10 +14,10 @@ namespace DBWebApi.Controllers
         public IHttpActionResult GetDuplicate()
         {
             //IGrouping<string,Category>[] categories = db.Categories.GroupBy(x => x.Name).Where(x => x.Count() > 1);
-            foreach (var item in categories)
-            {
+            //foreach (var item in categories)
+            //{
 
-            }
+            //}
             return Ok();
         }
     }

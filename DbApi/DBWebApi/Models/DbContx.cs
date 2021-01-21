@@ -114,6 +114,8 @@ namespace DBWebApi.Models
                     .IsRequired()
                     .HasMaxLength(100);
 
+                entity.Property(e => e.Description).HasMaxLength(256);
+
                 entity.Property(e => e.StartD).HasColumnType("timestamp with time zone");
             });
 

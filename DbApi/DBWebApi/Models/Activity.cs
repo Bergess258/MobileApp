@@ -17,6 +17,7 @@ namespace DBWebApi.Models
         public string Name { get; set; }
         public DateTime? StartD { get; set; }
         public DateTime? EndD { get; set; }
+        public string Description { get; set; }
 
         public virtual ICollection<ActAttending> ActAttendings { get; set; }
         public virtual ICollection<ActCategory> ActCategories { get; set; }
