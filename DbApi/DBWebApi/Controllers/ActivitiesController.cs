@@ -79,6 +79,30 @@ namespace DBWebApi.Controllers
 
         // POST: api/Activities
         [ResponseType(typeof(Activity))]
+        public IHttpActionResult PostActivity(ActWithCat activity)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            int length = activity.categories.Length;
+
+            for (int i = 0; i < length; i++)
+            {
+                if (activity.categories[i].Id == -1)
+                    db.Categories.Add(activity.categories[i]);
+            }
+            db.Activities.Add(activity);
+            db.SaveChanges();
+
+            for (int i = 0; i < activity.categories.Length; i++)
+                db.ActCategories.Add(new ActCategory() { Activity = activity, Category = activity.categories[i] });
+            db.SaveChanges();
+
+            return CreatedAtRoute("DefaultApi", new { id = activity.Id }, activity);
+        }
+
+        [ResponseType(typeof(Activity))]
         public IHttpActionResult PostActivity(Activity activity)
         {
             if (!ModelState.IsValid)

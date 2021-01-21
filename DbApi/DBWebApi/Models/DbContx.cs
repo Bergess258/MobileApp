@@ -20,6 +20,7 @@ namespace DBWebApi.Models
         public virtual DbSet<ActCategory> ActCategories { get; set; }
         public virtual DbSet<ActChat> ActChats { get; set; }
         public virtual DbSet<Activity> Activities { get; set; }
+        public virtual DbSet<Category> Categories { get; set; }
         public virtual DbSet<Quest> Quests { get; set; }
         public virtual DbSet<QuestTask> QuestTasks { get; set; }
         public virtual DbSet<QuestTaskUser> QuestTaskUser { get; set; }
@@ -46,13 +47,13 @@ namespace DBWebApi.Models
 
                 entity.Property(e => e.Id).UseIdentityAlwaysColumn();
 
-                entity.HasOne(d => d.Activities)
+                entity.HasOne(d => d.Activity)
                     .WithMany(p => p.ActAttendings)
                     .HasForeignKey(d => d.ActivityId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FkActivity");
 
-                entity.HasOne(d => d.Users)
+                entity.HasOne(d => d.User)
                     .WithMany(p => p.ActAttendings)
                     .HasForeignKey(d => d.UserId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
@@ -65,9 +66,17 @@ namespace DBWebApi.Models
 
                 entity.Property(e => e.Id).UseIdentityAlwaysColumn();
 
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.HasOne(d => d.Activity)
+                    .WithMany(p => p.ActCategories)
+                    .HasForeignKey(d => d.ActivityId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("fk_ActivityId");
+
+                entity.HasOne(d => d.Category)
+                    .WithMany(p => p.ActCategories)
+                    .HasForeignKey(d => d.CategoryId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("fk_CategoryId");
             });
 
             modelBuilder.Entity<ActChat>(entity =>
@@ -84,13 +93,13 @@ namespace DBWebApi.Models
                     .WithMany(p => p.ActChat)
                     .HasForeignKey(d => d.ActivityId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("fk_Activity");
+                    .HasConstraintName("fk_ActivityId");
 
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.ActChat)
                     .HasForeignKey(d => d.UserId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("fk_User");
+                    .HasConstraintName("fk_UserId");
             });
 
             modelBuilder.Entity<Activity>(entity =>
@@ -99,16 +108,24 @@ namespace DBWebApi.Models
 
                 entity.Property(e => e.Id).UseIdentityAlwaysColumn();
 
-                entity.Property(e => e.Date).HasColumnType("daterange");
+                entity.Property(e => e.EndD).HasColumnType("date");
 
                 entity.Property(e => e.Name)
                     .IsRequired()
                     .HasMaxLength(100);
 
-                entity.HasOne(d => d.Category)
-                    .WithMany(p => p.Activities)
-                    .HasForeignKey(d => d.CategoryId)
-                    .HasConstraintName("Fk_Category");
+                entity.Property(e => e.StartD).HasColumnType("date");
+            });
+
+            modelBuilder.Entity<Category>(entity =>
+            {
+                entity.ToTable("Category");
+
+                entity.Property(e => e.Id).UseIdentityAlwaysColumn();
+
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasMaxLength(256);
             });
 
             modelBuilder.Entity<Quest>(entity =>
@@ -191,7 +208,7 @@ namespace DBWebApi.Models
                     .HasMaxLength(24)
                     .IsFixedLength(true);
 
-                entity.Property(e => e.Role).HasColumnType("char");
+                entity.Property(e => e.Role).HasMaxLength(1);
             });
 
             modelBuilder.Entity<UserImg>(entity =>

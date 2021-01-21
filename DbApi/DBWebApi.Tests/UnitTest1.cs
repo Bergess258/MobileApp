@@ -19,5 +19,31 @@ namespace DBWebApi.Tests
             var result = qt.QuestWithTasks(testObj);
             Assert.IsNotNull(result);
         }
+
+        [TestMethod]
+        public void TestPutUser()
+        {
+            User testObj = new User() {Name = "Test",Mail = "Test",Password = "Bruh" };
+            var qt = new UsersController();
+            var result = qt.PostUser(testObj);
+            Assert.IsNotNull(result);
+        }
+        [TestMethod]
+        public void TestPutActivityNoCategory()
+        {
+            Activity testObj = new Activity() { Name = "Test"};
+            var qt = new ActivitiesController();
+            var result = qt.PostActivity(testObj);
+            Assert.IsNotNull(result);
+        }
+        [TestMethod]
+        public void TestPutActivityWithCategory()
+        {
+            Activity testObj = new Activity() { Name = "Test" };
+            testObj.
+            var qt = new ActivitiesController();
+            var result = qt.PostActivity(testObj);
+            Assert.IsNotNull(result);
+        }
     }
 }

@@ -14,11 +14,11 @@ namespace DBWebApi.Models
 
         public int Id { get; set; }
         public string Name { get; set; }
-        public int? CategoryId { get; set; }
-        public NpgsqlRange<DateTime>? Date { get; set; }
+        public DateTime? StartD { get; set; }
+        public DateTime? EndD { get; set; }
 
-        public virtual ActCategory Category { get; set; }
         public virtual ICollection<ActAttending> ActAttendings { get; set; }
+        public virtual ICollection<ActCategory> ActCategories { get; set; }
         public virtual ICollection<ActChat> ActChat { get; set; }
     }
 }

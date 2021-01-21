@@ -22,7 +22,7 @@ namespace DBWebApi.Models
         //Уже забыл зачем. Вроде как репутация, можно просто кого-то благодарить. Нлорм тема
         public int Thanks { get; set; }
         //Для админов
-        public string Role { get; set; }
+        public char? Role { get; set; }
         //Склироз мешает сори(если вспомню поправлю)
         public int EngPoints { get; set; }
 

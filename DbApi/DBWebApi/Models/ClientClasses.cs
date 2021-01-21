@@ -5,6 +5,7 @@ using System.Web;
 
 namespace DBWebApi.Models
 {
+    #region Quests
 
     public class QuestWithTasks : Quest
     {
@@ -42,5 +43,12 @@ namespace DBWebApi.Models
 
         }
     }
+    #endregion
 
+    #region Activities
+    public class ActWithCat:Activity
+    {
+        public Category[] categories;
+    }
+    #endregion
 }
