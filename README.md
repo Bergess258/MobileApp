@@ -20,5 +20,7 @@ host/Users?mail=parshakov-00@mail.ru&pass=7V7a96Z9g8FxL269OdIBCRdx
 Добавление квестов с тасками - это вызов метода UsersQuestWithTasks т.е. Quests/UsersQuestWithTasks юзается класс QuestWithTasks
 Добавление квестов с тасками и привязкой к людям, чтобы сразу выполнялись. Quests/UsersQuestWithTasks юзается класс UserQuestWithTasks
 ## Мероприятия
-Все стандартное, ничего не добавлено.
+Все стандартное, добавлена возможность добавлять мероприятие с категориями.
+В пост кидаем класс ActWithCat(находится в клиентских классах)
+Новые категории должны подаваться с id -1.
 Учет посещений Activities/id(айди мероприятия вместо id)?userid=айди юзера
