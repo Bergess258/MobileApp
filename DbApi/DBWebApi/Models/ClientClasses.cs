@@ -96,7 +96,7 @@ namespace DBWebApi.Models
             categories = cats;
         }
 
-        public static implicit operator Activity(ActWithCatPost b) => new Activity() { Name = b.name, StartD = b.startD, EndD = b.endD };
+        public static implicit operator Activity(ActWithCatPost b) => new Activity() { Name = b.name, StartD = b.startD, EndD = b.endD, Description = b.desc };
 
     }
 

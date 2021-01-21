@@ -42,7 +42,7 @@ namespace DBWebApi.Tests
             ActWithCatPost testObj = new ActWithCatPost("Test");
             testObj.categories = new Category[] { new Category("Проверочное")/*,new Category("Обязательно")*/ };
             var qt = new ActivitiesController();
-            var result = qt.PostActivity(testObj);
+            var result = qt.PostWithCat(testObj);
             Assert.IsNotNull(result);
         }
     }

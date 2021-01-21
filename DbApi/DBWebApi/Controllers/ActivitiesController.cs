@@ -87,6 +87,8 @@ namespace DBWebApi.Controllers
         }
 
         // POST: api/Activities
+        [Route("Activities/WithCat")]
+        [HttpPost]
         [ResponseType(typeof(ActWithCatPost))]
         public IHttpActionResult PostActivity(ActWithCatPost activity)
         {
