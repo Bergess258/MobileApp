@@ -39,10 +39,10 @@ namespace DBWebApi.Tests
         [TestMethod]
         public void TestPostActivityWithCategory()
         {
-            ActWithCatPost testObj = new ActWithCatPost("Test");
+            ActWithCatPost testObj = new ActWithCatPost("TestCategories222");
             testObj.categories = new Category[] { new Category("Проверочное")/*,new Category("Обязательно")*/ };
             var qt = new ActivitiesController();
-            var result = qt.PostWithCat(testObj);
+            var result = qt.PostActivity(testObj);
             Assert.IsNotNull(result);
         }
     }

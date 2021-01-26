@@ -82,6 +82,10 @@ namespace DBWebApi.Models
 
     public class ActWithCatPost: ActWithCat
     {
+        public ActWithCatPost()
+        {
+
+        }
         public ActWithCatPost(string name)
         {
             base.name = name;

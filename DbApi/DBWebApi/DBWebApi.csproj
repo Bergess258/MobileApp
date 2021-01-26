@@ -367,6 +367,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\ActivitiesController.cs" />
+    <Compile Include="Controllers\CategoriesController.cs" />
     <Compile Include="Controllers\DuplicatesController.cs" />
     <Compile Include="Controllers\QuestsController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
