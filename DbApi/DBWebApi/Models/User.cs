@@ -23,8 +23,8 @@ namespace DBWebApi.Models
         public int Thanks { get; set; }
         //Для админов
         public char? Role { get; set; }
-        //Склироз мешает сори(если вспомню поправлю)
-        public int EngPoints { get; set; }
+        //Теперь это очки kpi
+        public float EngPoints { get; set; }
 
         public virtual ICollection<ActAttending> ActAttendings { get; set; }
         public virtual ICollection<ActChat> ActChat { get; set; }

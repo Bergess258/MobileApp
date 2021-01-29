@@ -105,4 +105,18 @@ namespace DBWebApi.Models
     }
 
     #endregion
+
+    #region Cat
+    public class CatWithId
+    {
+        public int Id;
+        public string Name;
+
+        public CatWithId(int id,string name)
+        {
+            Id = id;
+            Name = name;
+        }
+    }
+    #endregion
 }
