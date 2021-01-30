@@ -15,6 +15,8 @@ namespace DBWebApi.Controllers
     public class UsersController : ApiController
     {
         private const string noSuchUserError = "No such user";
+        private const string noSuchCommentError = "No such comment";
+        private const float KPIAddForThanks = 0.5f;
         private DBContx db = new DBContx();
 
         // GET: api/Users
@@ -168,16 +170,16 @@ namespace DBWebApi.Controllers
             return db.Users.Count(e => e.Id == id) > 0;
         }
 
-        public IHttpActionResult SendThanks(int id,int actChatId)
+        public IHttpActionResult SendThanks(int actChatId)
         {
-            ActChat actChat = db.ActChats.Where(e => e.Id == actChatId).First();
+            ActChat actChat = db.ActChats.Find(actChatId);
             if (actChat == null)
                 //Хз че тут написать, но пусть пока будет так
-                return BadRequest(noSuchUserError);
+                return BadRequest(noSuchCommentError);
             actChat.Thanks++;
             actChat.User.Thanks++;
+            actChat.User.AddKPI(db, KPIAddForThanks);
             db.Entry(actChat).State = EntityState.Modified;
-            db.Entry(actChat.User).State = EntityState.Modified;
             db.SaveChanges();
             return Ok();
         }

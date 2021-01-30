@@ -14,6 +14,7 @@ namespace DBWebApi.Controllers
     public class ActivitiesController : ApiController
     {
         private DBContx db = new DBContx();
+        private const float KPIAddFotAttending = 0.1f;
 
         // GET: api/Activities
         public ActWithCatGet[] GetActivities()
@@ -163,6 +164,21 @@ namespace DBWebApi.Controllers
         private bool ActivityExists(int id)
         {
             return db.Activities.Count(e => e.Id == id) > 0;
+        }
+
+        public IHttpActionResult Attending(int userId,int actId)
+        {
+            Activity activity = db.Activities.Find(actId);
+            User user = db.Users.Find(userId);
+            if (activity == null||user ==null)
+            {
+                return NotFound();
+            }
+            user.ActAttendings.Add(new ActAttending() { Activity = activity, User = user });
+            user.AddKPI(db, KPIAddFotAttending);
+            db.SaveChanges();
+
+            return Ok();
         }
     }
 }

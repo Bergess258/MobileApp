@@ -25,10 +25,12 @@ namespace DBWebApi.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("a9fc1b7d0b47c4dffae1862492b38216ccb686d47324c5bf55e0de09a2a6c590")]
-        public string dbPassword {
+        [global::System.Configuration.DefaultSettingValueAttribute("Trust Server Certificate=True;SSL Mode=Require;Host=ec2-34-248-165-3.eu-west-1.co" +
+            "mpute.amazonaws.com;Database=danhsa7rd0h0u5;Port=5432;Username=veycugvkaidffx;Pa" +
+            "ssword=a9fc1b7d0b47c4dffae1862492b38216ccb686d47324c5bf55e0de09a2a6c590")]
+        public string dbCon {
             get {
-                return ((string)(this["dbPassword"]));
+                return ((string)(this["dbCon"]));
             }
         }
     }

@@ -45,5 +45,12 @@ namespace DBWebApi.Tests
             var result = qt.PostActivity(testObj);
             Assert.IsNotNull(result);
         }
+        [TestMethod]
+        public void TestAttending()
+        {
+            var qt = new ActivitiesController();
+            var result = qt.Attending(1,18);
+            Assert.IsNotNull(result);
+        }
     }
 }

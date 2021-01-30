@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
-
 namespace DBWebApi.Models
 {
     public partial class DBContx : DbContext
@@ -26,14 +25,15 @@ namespace DBWebApi.Models
         public virtual DbSet<QuestTaskUser> QuestTaskUser { get; set; }
         public virtual DbSet<Task> Tasks { get; set; }
         public virtual DbSet<User> Users { get; set; }
-        public virtual DbSet<UserImg> UserImg { get; set; }
+        public virtual DbSet<UserImg> UserImgs { get; set; }
         public virtual DbSet<UserQuest> UserQuests { get; set; }
+        public virtual DbSet<UsersKpihistory> UsersKpihistories { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseNpgsql("Trust Server Certificate=True;SSL Mode=Require;Host=ec2-34-248-165-3.eu-west-1.compute.amazonaws.com;Database=danhsa7rd0h0u5;Port=5432;Username=veycugvkaidffx;Password=a9fc1b7d0b47c4dffae1862492b38216ccb686d47324c5bf55e0de09a2a6c590");
+                optionsBuilder.UseNpgsql(Properties.Settings.Default.dbCon);
             }
         }
 
@@ -108,13 +108,13 @@ namespace DBWebApi.Models
 
                 entity.Property(e => e.Id).UseIdentityAlwaysColumn();
 
+                entity.Property(e => e.Description).HasMaxLength(256);
+
                 entity.Property(e => e.EndD).HasColumnType("timestamp with time zone");
 
                 entity.Property(e => e.Name)
                     .IsRequired()
                     .HasMaxLength(100);
-
-                entity.Property(e => e.Description).HasMaxLength(256);
 
                 entity.Property(e => e.StartD).HasColumnType("timestamp with time zone");
             });
@@ -245,6 +245,23 @@ namespace DBWebApi.Models
                     .HasForeignKey(d => d.UserId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("fk_UserId");
+            });
+
+            modelBuilder.Entity<UsersKpihistory>(entity =>
+            {
+                entity.ToTable("UsersKPIHistory");
+
+                entity.Property(e => e.Id).UseIdentityAlwaysColumn();
+
+                entity.Property(e => e.Date).HasColumnType("date");
+
+                entity.Property(e => e.Kpiadded).HasColumnName("KPIAdded");
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.UsersKpihistories)
+                    .HasForeignKey(d => d.UserId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("fk_User");
             });
 
             OnModelCreatingPartial(modelBuilder);

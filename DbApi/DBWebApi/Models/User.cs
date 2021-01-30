@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 
 namespace DBWebApi.Models
@@ -11,6 +12,7 @@ namespace DBWebApi.Models
             QuestTaskUsers = new HashSet<QuestTaskUser>();
             UserImg = new HashSet<UserImg>();
             UserQuests = new HashSet<UserQuest>();
+            UsersKpihistories = new HashSet<UsersKpihistory>();
         }
         public int Id { get; set; }
         public string Mail { get; set; }
@@ -33,5 +35,14 @@ namespace DBWebApi.Models
         //отдельная хрень на картинку(так вроде лучше работать должно и не будет нужная инфа подгружаться "долго"(в кавычках потому что я хз сколько это времени займет в обоих случаях))
         public virtual ICollection<UserImg> UserImg { get; set; }
         public virtual ICollection<UserQuest> UserQuests { get; set; }
+        public virtual ICollection<UsersKpihistory> UsersKpihistories { get; set; }
+
+        public void AddKPI(DBContx db,float kpiToAdd)
+        {
+            EngPoints += kpiToAdd;
+            db.UsersKpihistories.Add(new UsersKpihistory() { Date = DateTime.Today, Kpiadded = kpiToAdd, UserId = Id });
+            db.Entry(this).State = EntityState.Modified;
+            //db.SaveChanges(); Сейчас пока везде сохраняется и так
+        }
     }
 }
