@@ -45,9 +45,17 @@ namespace DBWebApi.Controllers
         }
         public IHttpActionResult GetActivity(int id,int userId)
         {
-            ActAttending actAttending = new ActAttending() { UserId = userId, ActivityId = id };
-            if (db.ActAttending.Find(actAttending)==null)
-                db.ActAttending.Add(actAttending);
+
+            Activity activity = db.Activities.Find(id);
+            User user = db.Users.Find(userId);
+            ActAttending actAttending = new ActAttending() { ActivityId = id, UserId = userId };
+            if (activity == null || user == null)
+                return NotFound();
+            if (db.ActAttending.Count(x => x.ActivityId == id && x.UserId == userId) > 0)
+                return BadRequest("Activity attending already exist");
+            user.ActAttendings.Add(actAttending);
+            user.AddKPI(db, KPIAddFotAttending);
+            db.SaveChanges();
 
             return Ok();
         }
@@ -164,21 +172,6 @@ namespace DBWebApi.Controllers
         private bool ActivityExists(int id)
         {
             return db.Activities.Count(e => e.Id == id) > 0;
-        }
-
-        public IHttpActionResult Attending(int userId,int actId)
-        {
-            Activity activity = db.Activities.Find(actId);
-            User user = db.Users.Find(userId);
-            if (activity == null||user ==null)
-            {
-                return NotFound();
-            }
-            user.ActAttendings.Add(new ActAttending() { Activity = activity, User = user });
-            user.AddKPI(db, KPIAddFotAttending);
-            db.SaveChanges();
-
-            return Ok();
         }
     }
 }

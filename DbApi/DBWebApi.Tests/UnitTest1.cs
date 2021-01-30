@@ -49,7 +49,7 @@ namespace DBWebApi.Tests
         public void TestAttending()
         {
             var qt = new ActivitiesController();
-            var result = qt.Attending(1,18);
+            var result = qt.GetActivity(18,1);
             Assert.IsNotNull(result);
         }
     }
