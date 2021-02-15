@@ -1,53 +1,55 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
+using DBWebApi.Data;
 using DBWebApi.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace DBWebApi.Controllers
 {
-    public class CategoriesController : ApiController
+    public class ActChatsController : ApiController
     {
         private DBContx db = new DBContx();
 
-        // GET: api/Categories
-        public IQueryable<CatWithId> GetCategories()
+        // GET: api/ActChats
+        public IQueryable<ActChat> GetActChats()
         {
-            return db.Categories.Select(x => new CatWithId(x.Id, x.Name));
+            return db.ActChats;
         }
 
-        // GET: api/Categories/5
-        [ResponseType(typeof(Category))]
-        public IHttpActionResult GetCategory(int id)
+        // GET: api/ActChats/5
+        [ResponseType(typeof(ActChat[]))]
+        public IHttpActionResult GetActChat(int id)
         {
-            Category category = db.Categories.Find(id);
-            if (category == null)
+            ActChat[] actChat = db.ActChats.Where(x=> x.ActivityId ==id).ToArray();
+            if (actChat == null)
             {
                 return NotFound();
             }
 
-            return Ok(category);
+            return Ok(actChat);
         }
 
-        // PUT: api/Categories/5
+        // PUT: api/ActChats/5
         [ResponseType(typeof(void))]
-        public IHttpActionResult PutCategory(int id, Category category)
+        public IHttpActionResult PutActChat(int id, ActChat actChat)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (id != category.Id)
+            if (id != actChat.Id)
             {
                 return BadRequest();
             }
 
-            db.Entry(category).State = EntityState.Modified;
+            db.Entry(actChat).State = EntityState.Modified;
 
             try
             {
@@ -55,7 +57,7 @@ namespace DBWebApi.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!CategoryExists(id))
+                if (!ActChatExists(id))
                 {
                     return NotFound();
                 }
@@ -68,38 +70,35 @@ namespace DBWebApi.Controllers
             return StatusCode(HttpStatusCode.NoContent);
         }
 
-        // POST: api/Categories
-        [ResponseType(typeof(Category))]
-        public IHttpActionResult PostCategory(Category category)
+        // POST: api/ActChats
+        [ResponseType(typeof(ActChat))]
+        public IHttpActionResult PostActChat(ActChat actChat)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            db.Categories.Add(category);
+            db.ActChats.Add(actChat);
             db.SaveChanges();
 
-            return CreatedAtRoute("DefaultApi", new { id = category.Id }, category);
+            return CreatedAtRoute("DefaultApi", new { id = actChat.Id }, actChat);
         }
 
-        // DELETE: api/Categories/5
-        [ResponseType(typeof(Category))]
-        public IHttpActionResult DeleteCategory(int id)
+        // DELETE: api/ActChats/5
+        [ResponseType(typeof(ActChat))]
+        public IHttpActionResult DeleteActChat(int id)
         {
-            Category category = db.Categories.Find(id);
-            if (category == null)
+            ActChat actChat = db.ActChats.Find(id);
+            if (actChat == null)
             {
                 return NotFound();
             }
 
-            foreach (var act in category.ActCategories)
-                db.ActCategories.Remove(act);
-
-            db.Categories.Remove(category);
+            db.ActChats.Remove(actChat);
             db.SaveChanges();
 
-            return Ok(category);
+            return Ok(actChat);
         }
 
         protected override void Dispose(bool disposing)
@@ -111,9 +110,9 @@ namespace DBWebApi.Controllers
             base.Dispose(disposing);
         }
 
-        private bool CategoryExists(int id)
+        private bool ActChatExists(int id)
         {
-            return db.Categories.Count(e => e.Id == id) > 0;
+            return db.ActChats.Count(e => e.Id == id) > 0;
         }
     }
 }

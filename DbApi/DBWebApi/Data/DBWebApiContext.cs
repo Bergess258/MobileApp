@@ -19,6 +19,10 @@ namespace DBWebApi.Data
         {
         }
 
-        public System.Data.Entity.DbSet<DBWebApi.Models.Category> Categories { get; set; }
+        public System.Data.Entity.DbSet<DBWebApi.Models.ActChat> ActChats { get; set; }
+
+        public System.Data.Entity.DbSet<DBWebApi.Models.Activity> Activities { get; set; }
+
+        public System.Data.Entity.DbSet<DBWebApi.Models.User> Users { get; set; }
     }
 }

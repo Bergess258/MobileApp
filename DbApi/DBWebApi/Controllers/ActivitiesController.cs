@@ -105,7 +105,9 @@ namespace DBWebApi.Controllers
             {
                 return BadRequest(ModelState);
             }
-            int length = activity.categories.Length;
+            int length = 0;
+            if (activity.categories != null)
+                length = activity.categories.Length;
 
             for (int i = 0; i < length; i++)
             {
@@ -116,7 +118,7 @@ namespace DBWebApi.Controllers
             db.Activities.Add(actReal);
             db.SaveChanges();
 
-            for (int i = 0; i < activity.categories.Length; i++)
+            for (int i = 0; i < length; i++)
             {
                 ActCategory actCategory = new ActCategory() { Activity = actReal, Category = activity.categories[i] };
                 db.ActCategories.Add(actCategory);
