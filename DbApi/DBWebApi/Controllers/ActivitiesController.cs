@@ -76,6 +76,18 @@ namespace DBWebApi.Controllers
 
             return Ok();
         }
+        public IHttpActionResult DelAtt(int id)
+        {
+            ActAttending actAttending = db.ActAttending.Find(id);
+            if (actAttending == null)
+                return NotFound();
+            actAttending.User.EngPoints -= KPIAddFotAttending;
+            db.Entry(actAttending.User).State = EntityState.Modified;
+            db.ActAttending.Remove(actAttending);
+            db.SaveChanges();
+
+            return Ok();
+        }
 
         // PUT: api/Activities/5
         [ResponseType(typeof(void))]
