@@ -60,6 +60,23 @@ namespace DBWebApi.Controllers
             return Ok();
         }
 
+        public IHttpActionResult DelAttending(int id, int userId)
+        {
+
+            Activity activity = db.Activities.Find(id);
+            User user = db.Users.Find(userId);
+            ActAttending actAttending = db.ActAttending.First(x=>x.ActivityId == id && x.UserId == userId);
+            if (activity == null || user == null || actAttending ==null)
+                return NotFound();
+            user.ActAttendings.Remove(actAttending);
+            db.ActAttending.Remove(actAttending);
+            user.EngPoints -= KPIAddFotAttending;
+            db.Entry(user).State = EntityState.Modified;
+            db.SaveChanges();
+
+            return Ok();
+        }
+
         // PUT: api/Activities/5
         [ResponseType(typeof(void))]
         public IHttpActionResult PutActivity(int id, Activity activity)

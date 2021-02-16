@@ -368,6 +368,7 @@
     <Compile Include="Controllers\ActChatsController.cs" />
     <Compile Include="Controllers\ActivitiesController.cs" />
     <Compile Include="Controllers\CategoriesController.cs" />
+    <Compile Include="Controllers\CompanyController.cs" />
     <Compile Include="Controllers\DuplicatesController.cs" />
     <Compile Include="Controllers\QuestsController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
@@ -380,6 +381,7 @@
     <Compile Include="Models\ActChat.cs" />
     <Compile Include="Models\Activity.cs" />
     <Compile Include="Models\Category.cs" />
+    <Compile Include="Models\Company.cs" />
     <Compile Include="Models\DBContx.cs" />
     <Compile Include="Models\Quest.cs" />
     <Compile Include="Models\QuestTask.cs" />
@@ -410,6 +412,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\Company\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

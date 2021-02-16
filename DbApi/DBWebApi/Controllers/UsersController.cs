@@ -17,6 +17,7 @@ namespace DBWebApi.Controllers
         private const string noSuchUserError = "No such user";
         private const string noSuchCommentError = "No such comment";
         private const float KPIAddForThanks = 0.5f;
+        private const float KPIAddForEntry = 0.1f;
         private DBContx db = new DBContx();
 
         // GET: api/Users
@@ -47,6 +48,12 @@ namespace DBWebApi.Controllers
                 return BadRequest("Неверная комбинация логина и пароля");
             if (!user.MailConfirm)
                 return BadRequest("Нужно подтверждение почты");
+            int daysBetweenEntry = DateTime.Today.Subtract(user.LastEntry).Days;
+            if (daysBetweenEntry > 1)
+                user.Bonus = 0;
+            if(daysBetweenEntry==1)
+                user.AddKPI(db, KPIAddForEntry * ++user.Bonus);
+            db.SaveChanges();
             return Ok(user);
         }
 

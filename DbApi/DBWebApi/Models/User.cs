@@ -27,6 +27,10 @@ namespace DBWebApi.Models
         public char? Role { get; set; }
         //Теперь это очки kpi
         public float EngPoints { get; set; }
+        //Дата поледнего входа
+        public DateTime LastEntry { get; set; }
+        //Текущий бонус за вход
+        public float Bonus { get; set; }
 
         public virtual ICollection<ActAttending> ActAttendings { get; set; }
         public virtual ICollection<ActChat> ActChat { get; set; }
@@ -41,6 +45,9 @@ namespace DBWebApi.Models
         {
             EngPoints += kpiToAdd;
             db.UsersKpihistories.Add(new UsersKpihistory() { Date = DateTime.Today, Kpiadded = kpiToAdd, UserId = Id });
+            db.Entry(this).State = EntityState.Modified;
+            Company comp = db.Company.Find(1);
+            comp.Kpi += kpiToAdd;
             db.Entry(this).State = EntityState.Modified;
             //db.SaveChanges(); Сейчас пока везде сохраняется и так
         }

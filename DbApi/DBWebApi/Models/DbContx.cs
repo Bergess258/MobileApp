@@ -20,6 +20,7 @@ namespace DBWebApi.Models
         public virtual DbSet<ActChat> ActChats { get; set; }
         public virtual DbSet<Activity> Activities { get; set; }
         public virtual DbSet<Category> Categories { get; set; }
+        public virtual DbSet<Company> Company { get; set; }
         public virtual DbSet<Quest> Quests { get; set; }
         public virtual DbSet<QuestTask> QuestTasks { get; set; }
         public virtual DbSet<QuestTaskUser> QuestTaskUser { get; set; }
@@ -130,6 +131,20 @@ namespace DBWebApi.Models
                     .HasMaxLength(256);
             });
 
+            modelBuilder.Entity<Company>(entity =>
+            {
+                entity.ToTable("Company");
+
+                entity.Property(e => e.Id).UseIdentityAlwaysColumn();
+
+                entity.Property(e => e.Kpi).HasColumnName("KPI");
+
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasColumnType("character varying")
+                    .HasDefaultValueSql("'Сибур'::character varying");
+            });
+
             modelBuilder.Entity<Quest>(entity =>
             {
                 entity.ToTable("Quest");
@@ -195,6 +210,11 @@ namespace DBWebApi.Models
                 entity.ToTable("User");
 
                 entity.Property(e => e.Id).UseIdentityAlwaysColumn();
+
+                entity.Property(e => e.LastEntry)
+                    .HasColumnType("date")
+                    .HasColumnName("Last_Entry")
+                    .HasDefaultValueSql("'2021-01-30'::date");
 
                 entity.Property(e => e.Mail)
                     .IsRequired()
