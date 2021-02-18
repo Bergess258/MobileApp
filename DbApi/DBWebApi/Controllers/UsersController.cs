@@ -42,7 +42,7 @@ namespace DBWebApi.Controllers
         [ResponseType(typeof(User))]
         public IHttpActionResult GetUser(string mail, string pass)
         {
-            User user = db.Users.Where(x => x.Mail == mail && x.Password == pass).First();
+            User user = db.Users.Where(x => x.Mail == mail && x.Password == pass).Include(x=>x.ActAttendings).ThenInclude(x=>x.Activity).First();
             if (user == null)
                 //Хз че тут написать, но пусть пока будет так
                 return BadRequest("Неверная комбинация логина и пароля");
