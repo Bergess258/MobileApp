@@ -60,6 +60,28 @@ namespace DBWebApi.Controllers
             return Ok();
         }
 
+        [HttpGet]
+        [ResponseType(typeof(ActAttending[]))]
+        public IHttpActionResult Attending(int id)
+        {
+            ActAttending[] chat = db.ActAttending.Where(x => x.ActivityId == id).Include(x => x.User).ToArray();
+            if (chat.Length != 0)
+                return Ok(chat);
+            else
+                return BadRequest();
+        }
+
+        [HttpGet]
+        [ResponseType(typeof(ActChat[]))]
+        public IHttpActionResult Chat(int id)
+        {
+            ActChat[] chat = db.ActChats.Where(x => x.ActivityId == id).Include(x=>x.User).ToArray();
+            if (chat.Length!=0)
+                return Ok(chat);
+            else
+                return BadRequest();
+        }
+
         public IHttpActionResult DelAttending(int id, int userId)
         {
 
