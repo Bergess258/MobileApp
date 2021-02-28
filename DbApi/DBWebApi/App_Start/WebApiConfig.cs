@@ -24,11 +24,10 @@ namespace DBWebApi
                 routeTemplate: "{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional }
             );
-
             config.Routes.MapHttpRoute(
                 name: "ExpandedApi",
                 routeTemplate: "{controller}/{action}/{id}",
-                defaults: new { id = RouteParameter.Optional }
+                defaults: new { id = RouteParameter.Optional}
             );
             GlobalConfiguration.Configuration.IncludeErrorDetailPolicy = IncludeErrorDetailPolicy.Always;
             GlobalConfiguration.Configuration.Formatters.JsonFormatter.SerializerSettings.Re‌​ferenceLoopHandling = ReferenceLoopHandling.Ignore;

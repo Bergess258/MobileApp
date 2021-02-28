@@ -6,7 +6,6 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
-using System.Web.Mvc;
 using DBWebApi.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -42,7 +41,7 @@ namespace DBWebApi.Controllers
         [ResponseType(typeof(User))]
         public IHttpActionResult GetUser(string mail, string pass)
         {
-            User user = db.Users.Where(x => x.Mail == mail && x.Password == pass).Include(x=>x.ActAttendings).ThenInclude(x=>x.Activity).First();
+            User user = db.Users.Where(x => x.Mail == mail && x.Password == pass).Include(x=>x.ActAttendings).First();
             if (user == null)
                 //Хз че тут написать, но пусть пока будет так
                 return BadRequest("Неверная комбинация логина и пароля");
@@ -55,6 +54,14 @@ namespace DBWebApi.Controllers
                 user.AddKPI(db, KPIAddForEntry * ++user.Bonus);
             db.SaveChanges();
             return Ok(user);
+        }
+
+        [HttpGet]
+        [Route("Users/MonthRank")]
+        public IHttpActionResult MonthRank()
+        {
+            //Rank[] temp = db.Database.ExecuteSqlRaw
+            return Ok();
         }
 
         // PUT: api/Users/5

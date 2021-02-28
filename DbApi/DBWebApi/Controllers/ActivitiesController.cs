@@ -43,6 +43,8 @@ namespace DBWebApi.Controllers
 
             return Ok(activity);
         }
+
+
         public IHttpActionResult GetActivity(int id,int userId)
         {
 
@@ -65,10 +67,7 @@ namespace DBWebApi.Controllers
         public IHttpActionResult Attending(int id)
         {
             ActAttending[] chat = db.ActAttending.Where(x => x.ActivityId == id).Include(x => x.User).ToArray();
-            if (chat.Length != 0)
-                return Ok(chat);
-            else
-                return BadRequest();
+            return Ok(chat);
         }
 
         [HttpGet]
@@ -81,13 +80,14 @@ namespace DBWebApi.Controllers
             else
                 return BadRequest();
         }
-
+        [Route("Activities/DelAttending/{id}")]
+        [HttpGet]
         public IHttpActionResult DelAttending(int id, int userId)
         {
 
             Activity activity = db.Activities.Find(id);
             User user = db.Users.Find(userId);
-            ActAttending actAttending = db.ActAttending.First(x=>x.ActivityId == id && x.UserId == userId);
+            ActAttending actAttending = db.ActAttending.FirstOrDefault(x=>x.ActivityId == id && x.UserId == userId);
             if (activity == null || user == null || actAttending ==null)
                 return NotFound();
             user.ActAttendings.Remove(actAttending);
@@ -98,6 +98,8 @@ namespace DBWebApi.Controllers
 
             return Ok();
         }
+        [Route("Activities/DelAtt/{id}")]
+        [HttpGet]
         public IHttpActionResult DelAtt(int id)
         {
             ActAttending actAttending = db.ActAttending.Find(id);
@@ -206,7 +208,6 @@ namespace DBWebApi.Controllers
             {
                 return NotFound();
             }
-
             db.Activities.Remove(activity);
             db.SaveChanges();
 

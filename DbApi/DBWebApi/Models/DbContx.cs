@@ -1,9 +1,14 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
+using System.Linq;
 
 namespace DBWebApi.Models
 {
+    public class Rank
+    {
+        public int UserId { get; set; }
+        public float KPI { get; set; }
+    }
     public partial class DBContx : DbContext
     {
         public DBContx()

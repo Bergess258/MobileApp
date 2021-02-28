@@ -15,6 +15,7 @@ namespace DBWebApi.Controllers
     public class ActChatsController : ApiController
     {
         private DBContx db = new DBContx();
+        private const float KPIAddFotComment = 0.1f;
 
         // GET: api/ActChats
         public IQueryable<ActChat> GetActChats()
@@ -78,7 +79,10 @@ namespace DBWebApi.Controllers
             {
                 return BadRequest(ModelState);
             }
-
+            User user = db.Users.Find(actChat.UserId);
+            if (user == null)
+                return NotFound();
+            user.AddKPI(db,KPIAddFotComment);
             db.ActChats.Add(actChat);
             db.SaveChanges();
 
