@@ -27,6 +27,7 @@ host/Users?mail=parshakov-00@mail.ru&pass=7V7a96Z9g8FxL269OdIBCRdx
 Просмотр посещение Activities/Attending/id(айди мероприятия)
 Удаление посещения Activities/DelAttending/id(айди мероприятия вместо id)?userid=айди юзера  
 Удаление посещения Activities/DelAtt/id(айди посещения) //Предпочтительно  
+Получить категории мероприятия Activities/Categories/{id}
 ## Чат мероприятий
 Все стандартно кроме  
 /ActChats/id(мероприятия) возвращает чат мероприятия
