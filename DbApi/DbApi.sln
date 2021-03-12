@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30413.136
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DBWebApi.Tests", "DBWebApi.Tests\DBWebApi.Tests.csproj", "{9F5B8A72-CA51-4098-B7B5-621263C9AA7E}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DbApiCore", "DbApiCore\DbApiCore.csproj", "{821C9128-38C8-49A4-BAEA-E54E5FD9C95B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XUnitTestProject1", "XUnitTestProject1\XUnitTestProject1.csproj", "{B77CE0C0-238C-43E7-9357-9C04BE3F315F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,14 +13,14 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{9F5B8A72-CA51-4098-B7B5-621263C9AA7E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9F5B8A72-CA51-4098-B7B5-621263C9AA7E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9F5B8A72-CA51-4098-B7B5-621263C9AA7E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9F5B8A72-CA51-4098-B7B5-621263C9AA7E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{821C9128-38C8-49A4-BAEA-E54E5FD9C95B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{821C9128-38C8-49A4-BAEA-E54E5FD9C95B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{821C9128-38C8-49A4-BAEA-E54E5FD9C95B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{821C9128-38C8-49A4-BAEA-E54E5FD9C95B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B77CE0C0-238C-43E7-9357-9C04BE3F315F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B77CE0C0-238C-43E7-9357-9C04BE3F315F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B77CE0C0-238C-43E7-9357-9C04BE3F315F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B77CE0C0-238C-43E7-9357-9C04BE3F315F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

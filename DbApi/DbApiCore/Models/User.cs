@@ -43,7 +43,7 @@ namespace DbApiCore.Models
             db.Entry(this).State = EntityState.Modified;
             Company comp = db.Company.Find(1);
             comp.Kpi += kpiToAdd;
-            db.Entry(this).State = EntityState.Modified;
+            db.Entry(comp).State = EntityState.Modified;
             //db.SaveChanges(); Сейчас пока везде сохраняется и так
         }
     }

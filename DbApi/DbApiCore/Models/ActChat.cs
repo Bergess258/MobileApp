@@ -11,7 +11,7 @@ namespace DbApiCore.Models
         public int Thanks { get; set; }
         public string Text { get; set; }
         public string UserName { get; set; }
-        public int UserId { get; set; }
+        public int? UserId { get; set; }
         public int ActivityId { get; set; }
 
         public virtual Activity Activity { get; set; }

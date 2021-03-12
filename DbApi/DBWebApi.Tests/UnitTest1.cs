@@ -1,9 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using DBWebApi.Controllers;
-using DBWebApi.Models;
 
-namespace DBWebApi.Tests
+namespace DbWebApi.Tests
 {
     [TestClass]
     public class UnitTest1

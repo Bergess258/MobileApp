@@ -35,22 +35,30 @@ namespace DbApiCore.Controllers
 
             return user;
         }
-
-        public async Task<ActionResult<User>> GetUser(string mail, string pass)
+        [HttpGet]
+        public async Task<object> GetUser(string? mail,string pass)
         {
-            User user = await db.Users.Where(x => x.Mail == mail && x.Password == pass).Include(x => x.ActAttendings).FirstAsync();
-            if (user == null)
-                //Хз че тут написать, но пусть пока будет так
-                return BadRequest("Неверная комбинация логина и пароля");
-            if (!user.MailConfirm)
-                return BadRequest("Нужно подтверждение почты");
-            int daysBetweenEntry = DateTime.Today.Subtract(user.LastEntry).Days;
-            if (daysBetweenEntry > 1)
-                user.Bonus = 0;
-            if (daysBetweenEntry == 1)
-                user.AddKPI(db, KPIAddForEntry * ++user.Bonus);
-            db.SaveChanges();
-            return Ok(user);
+            if (mail != null)
+            {
+                User user = await db.Users.Where(x => x.Mail == mail && x.Password == pass).Include(x => x.ActAttendings).FirstAsync();
+                if (user == null)
+                    //Хз че тут написать, но пусть пока будет так
+                    return BadRequest("Неверная комбинация логина и пароля");
+                if (!user.MailConfirm)
+                    return BadRequest("Нужно подтверждение почты");
+                int daysBetweenEntry = DateTime.Today.Subtract(user.LastEntry).Days;
+                if (daysBetweenEntry >= 1)
+                {
+                    if (daysBetweenEntry > 1)
+                        user.Bonus = 0;
+                    user.LastEntry = DateTime.Now;
+                    user.AddKPI(db, KPIAddForEntry * ++user.Bonus);
+                }
+                db.SaveChanges();
+                return Ok(user);
+            }
+            else
+                return db.Users.Select(x => new { x.Id, x.Name });
         }
 
         // PUT: api/Users/5
@@ -97,6 +105,14 @@ namespace DbApiCore.Controllers
             return CreatedAtAction("GetUser", new { id = user.Id }, user);
         }
 
+        [HttpGet]
+        [Route("/Users/Attending/{id}")]
+        public async Task<ActAttending[]> Attending(int id)
+        {
+            ActAttending[] chat = await db.ActAttending.Where(x => x.UserId == id).ToArrayAsync();
+            return chat;
+        }
+
         // DELETE: api/Users/5
         [HttpDelete("{id}")]
         public async Task<ActionResult<User>> DeleteUser(int id)
@@ -106,7 +122,6 @@ namespace DbApiCore.Controllers
             {
                 return NotFound();
             }
-
             db.Users.Remove(user);
             await db.SaveChangesAsync();
 

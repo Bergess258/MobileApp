@@ -90,14 +90,14 @@ namespace DbApiCore.Controllers
         public async Task<ActionResult<Category>> DeleteCategory(int id)
         {
             var category = await db.Categories.FindAsync(id);
+            db.Entry(category).Collection(x => x.ActCategories).Load();
             if (category == null)
             {
                 return NotFound();
             }
-
-            foreach (var act in category.ActCategories)
-                db.ActCategories.Remove(act);
-
+            ActCategory[] ActCategories = category.ActCategories.ToArray();
+            for (int i = 0; i < ActCategories.Length; ++i)
+                db.ActCategories.Remove(ActCategories[i]);
             db.Categories.Remove(category);
             await db.SaveChangesAsync();
 

@@ -38,32 +38,38 @@ namespace DbApiCore.Controllers
         }
 
         // GET: api/Activities/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Activity>> GetActivity(int id)
-        {
-            var activity = await db.Activities.FindAsync(id);
+        //[HttpGet("{id}")]
+        //public async Task<ActionResult<Activity>> GetActivity(int id)
+        //{
+        //    var activity = await db.Activities.FindAsync(id);
 
+        //    if (activity == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    return activity;
+        //}
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Activity>> GetActivity(int id, int? userId)
+        {
+            Activity activity = await db.Activities.FindAsync(id);
             if (activity == null)
+                return NotFound();
+            if (userId.HasValue)
             {
-                return NotFound();
+                User user = db.Users.Find(userId.Value);
+                ActAttending actAttending = new ActAttending() { ActivityId = id, UserId = userId.Value };
+                if (activity == null || user == null)
+                    return NotFound();
+                if (db.ActAttending.Count(x => x.ActivityId == id && x.UserId == userId.Value) > 0)
+                    return BadRequest("Activity attending already exist");
+                user.ActAttendings.Add(actAttending);
+                user.AddKPI(db, KPIAddFotAttending);
+                db.SaveChanges();
+                return Ok();
             }
-
             return activity;
-        }
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetActivity(int id,int userId)
-        {
-            Activity activity =  db.Activities.Find(id);
-            User user = db.Users.Find(userId);
-            ActAttending actAttending = new ActAttending() { ActivityId = id, UserId = userId };
-            if (activity == null || user == null)
-                return NotFound();
-            if (db.ActAttending.Count(x => x.ActivityId == id && x.UserId == userId) > 0)
-                return BadRequest("Activity attending already exist");
-            user.ActAttendings.Add(actAttending);
-            user.AddKPI(db, KPIAddFotAttending);
-            await db.SaveChangesAsync();
-            return Ok();
         }
 
         [HttpGet]
@@ -72,6 +78,14 @@ namespace DbApiCore.Controllers
         {
             ActAttending[] chat = await db.ActAttending.Where(x => x.ActivityId == id).Include(x => x.User).ToArrayAsync();
             return chat;
+        }
+
+        [HttpGet]
+        [Route("/Activities/Categories/{id}")]
+        public async Task<Category[]> Categories(int id)
+        {
+            Category[] cats = await db.ActCategories.Where(x => x.ActivityId == id).Include(x => x.Category).Select(x=>x.Category).ToArrayAsync();
+            return cats;
         }
 
         [HttpGet]
@@ -117,14 +131,45 @@ namespace DbApiCore.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutActivity(int id, Activity activity)
+        public async Task<IActionResult> PutActivity(int id, ActWithCatPost activity)
         {
-            if (id != activity.Id)
+            if (id != activity.id)
             {
                 return BadRequest();
             }
 
-            db.Entry(activity).State = EntityState.Modified;
+            int length = 0;
+            if (activity.categories != null)
+                length = activity.categories.Length;
+
+            for (int i = 0; i < length; i++)
+            {
+                if (activity.categories[i].Id == 0)
+                    db.Categories.Add(activity.categories[i]);
+            }
+            db.Entry((Activity)activity).State = EntityState.Modified;
+            db.SaveChanges();
+
+            List<ActCategory> actCategories = db.ActCategories.Where(x => x.ActivityId == id).ToList();
+            for (int i = 0; i < length; ++i)
+            {
+                bool noSkip = true;
+                for (int j = 0; j < actCategories.Count;++j)
+                {
+                    if(activity.categories[i].Id == actCategories[j].CategoryId)
+                    {
+                        noSkip = false;
+                        actCategories.RemoveAt(j);
+                        break;
+                    }
+                }
+                if (noSkip)
+                    db.ActCategories.Add(new ActCategory() { ActivityId = id, CategoryId = activity.categories[i].Id });
+            }
+            for (int j = 0; j < actCategories.Count; ++j)
+            {
+                db.ActCategories.Remove(actCategories[j]);
+            }
 
             try
             {
@@ -156,7 +201,7 @@ namespace DbApiCore.Controllers
 
             return CreatedAtAction("GetActivity", new { id = activity.Id }, activity);
         }
-
+        [Route("/Activities/WithCat")]
         [HttpPost]
         public async Task<ActionResult<Activity>> PostActivity(ActWithCatPost activity)
         {
@@ -191,12 +236,11 @@ namespace DbApiCore.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult<Activity>> DeleteActivity(int id)
         {
-            var activity = await db.Activities.FindAsync(id);
+            var activity = db.Activities.Find(id);
             if (activity == null)
             {
                 return NotFound();
             }
-
             db.Activities.Remove(activity);
             await db.SaveChangesAsync();
 
