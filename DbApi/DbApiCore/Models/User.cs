@@ -37,6 +37,7 @@ namespace DbApiCore.Models
         public virtual ICollection<UserImg> UserImgs { get; set; }
         public virtual ICollection<UserQuest> UserQuests { get; set; }
         public virtual ICollection<UsersKpihistory> UsersKpihistories { get; set; }
+
         public void AddKPI(DBContx db, float kpiToAdd)
         {
             EngPoints += kpiToAdd;

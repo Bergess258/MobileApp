@@ -40,7 +40,7 @@ namespace DbApiCore.Controllers
         {
             if (mail != null)
             {
-                User user = await db.Users.Where(x => x.Mail == mail && x.Password == pass).Include(x => x.ActAttendings).FirstAsync();
+                User user = await db.Users.Where(x => x.Mail == mail && x.Password == pass).Include(x => x.ActAttendings).Include(x=>x.UserImgs).FirstAsync();
                 if (user == null)
                     //Хз че тут написать, но пусть пока будет так
                     return BadRequest("Неверная комбинация логина и пароля");
@@ -62,7 +62,6 @@ namespace DbApiCore.Controllers
                         user.Display = false;
                         db.Entry(user).State = EntityState.Modified;
                     }
-                    
                 db.SaveChanges();
                 return Ok(user);
             }
@@ -100,6 +99,24 @@ namespace DbApiCore.Controllers
             }
 
             return NoContent();
+        }
+
+        [Route("/Users/Pic")]
+        [HttpPost]
+        public async Task<IActionResult> PostUserPic(UserImg userImg)
+        {
+            UserImg img;
+            if (userImg.Id != 0)
+            {
+                img = db.UserImg.Find(userImg.Id);
+                img.Img = userImg.Img;
+                db.Entry(img).State = EntityState.Modified;
+            }
+            else   
+                db.UserImg.Add(userImg);
+            await db.SaveChangesAsync();
+
+            return Ok();
         }
 
         // POST: api/Users

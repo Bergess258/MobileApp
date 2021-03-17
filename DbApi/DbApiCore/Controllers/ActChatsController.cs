@@ -34,7 +34,7 @@ namespace DbApiCore.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<ActChat[]>> GetActChat(int id)
         {
-            ActChat[] actChat = await db.ActChats.Where(x => x.ActivityId == id).ToArrayAsync();
+            ActChat[] actChat = await db.ActChats.Where(x => x.ActivityId == id).Include(x=>x.ChatPhotos).ToArrayAsync();
 
             if (actChat == null)
             {
@@ -56,6 +56,27 @@ namespace DbApiCore.Controllers
             }
 
             db.Entry(actChat).State = EntityState.Modified;
+
+            List<ChatPhoto> chatPhotos = db.ChatPhotos.Where(x => x.ActChatId == id).ToList();
+            foreach(ChatPhoto chatPhoto in actChat.ChatPhotos)
+            {
+                bool noSkip = true;
+                for (int j = 0; j < chatPhotos.Count; ++j)
+                {
+                    if (chatPhoto.Id == chatPhotos[j].Id)
+                    {
+                        noSkip = false;
+                        chatPhotos.RemoveAt(j);
+                        break;
+                    }
+                }
+                if (noSkip)
+                    db.ChatPhotos.Add(chatPhoto);
+            }
+            for (int j = 0; j < chatPhotos.Count; ++j)
+            {
+                db.ChatPhotos.Remove(chatPhotos[j]);
+            }
 
             try
             {
@@ -86,6 +107,8 @@ namespace DbApiCore.Controllers
             if (user == null)
                 return NotFound();
             user.AddKPI(db, KPIAddFotComment);
+            foreach (var photo in actChat.ChatPhotos)
+                db.ChatPhotos.Add(photo);
             db.ActChats.Add(actChat);
             await db.SaveChangesAsync();
 

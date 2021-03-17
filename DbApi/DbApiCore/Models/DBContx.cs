@@ -2,7 +2,6 @@
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.Extensions.Configuration;
 
 #nullable disable
 
@@ -24,27 +23,19 @@ namespace DbApiCore.Models
         public virtual DbSet<ActChat> ActChats { get; set; }
         public virtual DbSet<Activity> Activities { get; set; }
         public virtual DbSet<Category> Categories { get; set; }
+        public virtual DbSet<ChatPhoto> ChatPhotos { get; set; }
         public virtual DbSet<Company> Company { get; set; }
         public virtual DbSet<Quest> Quests { get; set; }
         public virtual DbSet<QuestTask> QuestTasks { get; set; }
         public virtual DbSet<QuestTaskUser> QuestTaskUsers { get; set; }
         public virtual DbSet<Task> Tasks { get; set; }
         public virtual DbSet<User> Users { get; set; }
-        public virtual DbSet<UserImg> UserImgs { get; set; }
+        public virtual DbSet<UserImg> UserImg { get; set; }
         public virtual DbSet<UserQuest> UserQuests { get; set; }
         public virtual DbSet<UsersKpihistory> UsersKpihistories { get; set; }
 
         public IQueryable<UsersRank> MonthRank() => FromExpression(() => MonthRank());
         public IQueryable<UsersRank> Rank() => FromExpression(() => Rank());
-
-
-        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        //{
-        //    if (!optionsBuilder.IsConfigured)
-        //    {
-        //        optionsBuilder.UseNpgsql(Properties.Resources.dbCon);
-        //    }
-        //}
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -59,13 +50,11 @@ namespace DbApiCore.Models
                 entity.HasOne(d => d.Activity)
                     .WithMany(p => p.ActAttendings)
                     .HasForeignKey(d => d.ActivityId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FkActivity");
 
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.ActAttendings)
                     .HasForeignKey(d => d.UserId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FkUser");
             });
 
@@ -78,7 +67,6 @@ namespace DbApiCore.Models
                 entity.HasOne(d => d.Activity)
                     .WithMany(p => p.ActCategories)
                     .HasForeignKey(d => d.ActivityId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("fk_ActivityId");
 
                 entity.HasOne(d => d.Category)
@@ -98,16 +86,21 @@ namespace DbApiCore.Models
                     .IsRequired()
                     .HasColumnType("character varying");
 
+                entity.Property(e => e.UserId).HasDefaultValueSql("0");
+
+                entity.Property(e => e.UserName)
+                    .IsRequired()
+                    .HasColumnType("character varying");
+
                 entity.HasOne(d => d.Activity)
                     .WithMany(p => p.ActChats)
                     .HasForeignKey(d => d.ActivityId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("fk_ActivityId");
 
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.ActChats)
                     .HasForeignKey(d => d.UserId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .OnDelete(DeleteBehavior.SetNull)
                     .HasConstraintName("fk_UserId");
             });
 
@@ -137,6 +130,20 @@ namespace DbApiCore.Models
                 entity.Property(e => e.Name)
                     .IsRequired()
                     .HasMaxLength(256);
+            });
+
+            modelBuilder.Entity<ChatPhoto>(entity =>
+            {
+                entity.ToTable("ChatPhoto");
+
+                entity.Property(e => e.Id).UseIdentityAlwaysColumn();
+
+                entity.Property(e => e.Photo).IsRequired();
+
+                entity.HasOne(d => d.ActChat)
+                    .WithMany(p => p.ChatPhotos)
+                    .HasForeignKey(d => d.ActChatId)
+                    .HasConstraintName("ActChatId");
             });
 
             modelBuilder.Entity<Company>(entity =>
@@ -198,7 +205,6 @@ namespace DbApiCore.Models
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.QuestTaskUsers)
                     .HasForeignKey(d => d.UserId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("fk_User");
             });
 
@@ -218,6 +224,10 @@ namespace DbApiCore.Models
                 entity.ToTable("User");
 
                 entity.Property(e => e.Id).UseIdentityAlwaysColumn();
+
+                entity.Property(e => e.Display)
+                    .IsRequired()
+                    .HasDefaultValueSql("true");
 
                 entity.Property(e => e.LastEntry)
                     .HasColumnType("date")
@@ -247,10 +257,11 @@ namespace DbApiCore.Models
 
                 entity.Property(e => e.Id).UseIdentityAlwaysColumn();
 
+                entity.Property(e => e.Img).IsRequired();
+
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.UserImgs)
                     .HasForeignKey(d => d.UserId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("fk_user");
             });
 
@@ -271,7 +282,6 @@ namespace DbApiCore.Models
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.UserQuests)
                     .HasForeignKey(d => d.UserId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("fk_UserId");
             });
 
@@ -288,9 +298,9 @@ namespace DbApiCore.Models
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.UsersKpihistories)
                     .HasForeignKey(d => d.UserId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("fk_User");
             });
+
             modelBuilder.Entity<UsersRank>().HasNoKey();
             modelBuilder.HasDbFunction(typeof(DBContx).GetMethod(nameof(MonthRank)));
             modelBuilder.HasDbFunction(typeof(DBContx).GetMethod(nameof(Rank)));
