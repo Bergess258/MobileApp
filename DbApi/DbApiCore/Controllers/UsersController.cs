@@ -47,13 +47,22 @@ namespace DbApiCore.Controllers
                 if (!user.MailConfirm)
                     return BadRequest("Нужно подтверждение почты");
                 int daysBetweenEntry = DateTime.Today.Subtract(user.LastEntry).Days;
+                
                 if (daysBetweenEntry >= 1)
                 {
                     if (daysBetweenEntry > 1)
                         user.Bonus = 0;
+                    user.Display = true;
                     user.LastEntry = DateTime.Now;
                     user.AddKPI(db, KPIAddForEntry * ++user.Bonus);
                 }
+                else
+                    if (user.Display)
+                    {
+                        user.Display = false;
+                        db.Entry(user).State = EntityState.Modified;
+                    }
+                    
                 db.SaveChanges();
                 return Ok(user);
             }

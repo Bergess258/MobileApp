@@ -29,6 +29,7 @@ namespace DbApiCore.Models
         public float EngPoints { get; set; }
         public DateTime LastEntry { get; set; }
         public float Bonus { get; set; }
+        public bool Display { get; set; }
 
         public virtual ICollection<ActAttending> ActAttendings { get; set; }
         public virtual ICollection<ActChat> ActChats { get; set; }
